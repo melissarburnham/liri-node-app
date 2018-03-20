@@ -35,12 +35,9 @@ function myTweets(){
   var params = {screen_name: 'melburn1133'};
   client.get('statuses/user_timeline', params, function(error, tweets, response) {
   if (!error) {
- 
-    
     for (var tweet in tweets) {
     console.log(tweets[tweet].text + " Date written: " + tweets[tweet].created_at);
-}
-    
+        }
       }
     });
   }
