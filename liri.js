@@ -6,8 +6,8 @@ var arg3 = process.argv[3];
 var request = require("request");
 var keys = require("./keys.js");
 // var spotify = new Spotify(keys.spotify);
-// var client = new Twitter(keys.twitter);
-
+var Twitter = require('twitter');
+var client = new Twitter(keys.twitter);
 
 switch (arg2) {
     case "my-tweets":
@@ -32,14 +32,15 @@ switch (arg2) {
 // }
 
 function myTweets(){
-    var queryUrl = "https://api.twitter.com/1.1/search/tweets.json?q="+ keys.twitter.consumer_key + "&count=20"
-    request(queryUrl, function(error, response, body) {
-
-      if (!error && response.statusCode === 200) {
-      //   console.log(JSON.parse(body));
-        var tweets = JSON.parse(body);
-        console.log(tweets);
-          
+  var params = {screen_name: 'melburn1133'};
+  client.get('statuses/user_timeline', params, function(error, tweets, response) {
+  if (!error) {
+ 
+    
+    for (var tweet in tweets) {
+    console.log(tweets[tweet].text + " Date written: " + tweets[tweet].created_at);
+}
+    
       }
     });
   }
@@ -48,13 +49,12 @@ function myTweets(){
 function movieThis(){
     //need help: rotten tomato rating, making code dryer, and appending to log.txt
 
-var queryUrl = "http://www.omdbapi.com/?t=" + arg2  + "&y=&plot=short&apikey=trilogy";
-request(queryUrl, function(error, response, body) {
-
-    if (!error && response.statusCode === 200) {
+  var queryUrl = "http://www.omdbapi.com/?t=" + arg2  + "&y=&plot=short&apikey=trilogy";
+  request(queryUrl, function(error, response, body) {
+  if (!error && response.statusCode === 200) {
     //   console.log(JSON.parse(body));
       var movie = JSON.parse(body);
-      console.log(JSON.parse(body).Title);
+      console.log(movie.Title);
       console.log("The movie's release year is: " + movie.Year);
       console.log("The movie's IMDB rating is: " + movie.imdbRating);
       console.log("The movie's Rotten Tomato rating is: " + movie.Ratings.Source);
