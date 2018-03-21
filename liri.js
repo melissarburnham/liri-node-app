@@ -38,7 +38,7 @@ switch (arg2) {
     //text the log.txt data
 
 function myTweets(){
-  var params = {screen_name: 'melburn1133'};
+  var params = {screen_name: 'melburn1133', count: 20};
   client.get('statuses/user_timeline', params, function(error, tweets, response) {
   if (!error) {
     for (var tweet in tweets) {
@@ -70,11 +70,14 @@ function movieThis(){
 }
 
 function callSpotify(){
-  spotify.search({ type: 'track', query: arg2 }, function(err, data) {
+  spotify.search({ type: 'track', query: arg3 }, function(err, data) {
     if (err) {
       return console.log('Error occurred: ' + err);
     }
-  console.log(data); 
+    console.log(data.tracks.items[0].name);
+    console.log(data.tracks.items[0].artists[0].name);
+    console.log(data.tracks.items[0].external_urls.spotify);
+    console.log(data.tracks.items[0].album.name);    
   });
 }
 
