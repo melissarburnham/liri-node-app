@@ -1,13 +1,15 @@
 
-// import { appendFile } from "fs";
+var fs = require("fs");
 require("dotenv").config();
+// require("./random.text");
 var arg2 = process.argv[2];
 var arg3 = process.argv[3];
 var request = require("request");
 var keys = require("./keys.js");
-// var spotify = new Spotify(keys.spotify);
 var Twitter = require('twitter');
 var client = new Twitter(keys.twitter);
+var Spotify = require('node-spotify-api');
+var spotify = new Spotify(keys.spotify);
 
 switch (arg2) {
     case "my-tweets":
@@ -15,7 +17,7 @@ switch (arg2) {
       break;
     
     case "spotify-this-song":
-      spotify();
+      callSpotify();
       break;
     
     case "movie-this":
@@ -29,7 +31,11 @@ switch (arg2) {
 
 // if(!arg2){
    
-// }
+//NEED TO DO:
+    //fix spotify function--figure out what to console.log
+    //write the !arg2 function
+    //fix the do what this says function
+    //text the log.txt data
 
 function myTweets(){
   var params = {screen_name: 'melburn1133'};
@@ -39,52 +45,57 @@ function myTweets(){
     console.log(tweets[tweet].text + " Date written: " + tweets[tweet].created_at);
         }
       }
+      appendData(tweets);
     });
   }
 
 
 function movieThis(){
-    //need help: rotten tomato rating, making code dryer, and appending to log.txt
-
-  var queryUrl = "http://www.omdbapi.com/?t=" + arg2  + "&y=&plot=short&apikey=trilogy";
+  var queryUrl = "http://www.omdbapi.com/?t=" + arg3  + "&y=&plot=short&apikey=trilogy";
   request(queryUrl, function(error, response, body) {
   if (!error && response.statusCode === 200) {
-    //   console.log(JSON.parse(body));
       var movie = JSON.parse(body);
+      // console.log(movie);
       console.log(movie.Title);
       console.log("The movie's release year is: " + movie.Year);
       console.log("The movie's IMDB rating is: " + movie.imdbRating);
-      console.log("The movie's Rotten Tomato rating is: " + movie.Ratings.Source);
+      console.log("The movie's Rotten Tomato rating is: " + movie.Ratings[1].Value);
       console.log("The movie's country is: " + movie.Country);
       console.log("The movie's language is: " + movie.Language);       
       console.log("The movie's plot is: " + movie.Plot);
       console.log("The movie's actors are: " + movie.Actors);    
     }
+    appendData(movie);
   });
 }
 
-//Make it so liri.js can take in one of the following commands:
-// * `my-tweets`
+function callSpotify(){
+  spotify.search({ type: 'track', query: arg2 }, function(err, data) {
+    if (err) {
+      return console.log('Error occurred: ' + err);
+    }
+  console.log(data); 
+  });
+}
 
-// * `spotify-this-song`
+function doWhatThisSays(){
+  fs.readFile("random.txt", "utf8", function(error, data) {
+    if (error) {
+      return console.log(error);
+    }
+    console.log(data);
+  });
+}
 
-// * `movie-this`
 
-// * `do-what-it-says`
-// ├── .env
-// ├── keys.js
-// ├── liri.js
-// ├── liriBonus.js
-// ├── log.txt
-// ├── package-lock.json
-// ├── package.json
-// └── random.txt
+function appendData(callback){
+  fs.appendFile("log.txt", JSON.stringify(callback) + "\n", function(err) {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      console.log("Content added to log.txt!");
+    }
+});
+}
 
-// fs.appendFile("log.txt", keys.twitter, function(err) {
-//     if (err) {
-//       console.log(err);
-//     }
-//     else {
-//       console.log("Content added to log.txt!");
-//     }
-// });
