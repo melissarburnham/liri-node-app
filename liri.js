@@ -33,12 +33,7 @@ switch (arg2) {
       console.log('You need to tell me what to do');
     } 
 
-  // if(arg2 === "movie-this" && arg3 ===""){
-  //   noMovie();
-  // }
-   
 //NEED TO DO:
-    //write the !arg2 function for movie and spotify
     //fix the do what this says function
     //fix the log.txt data display
 
@@ -47,6 +42,17 @@ function lengthCheck(){
   for (var i = 3; i < nodeArgs.length; i++) {
     songOrMovie = songOrMovie.trim() + " " + nodeArgs[i];
   }
+}
+
+function appendData(callback){
+  fs.appendFile("log.txt", JSON.stringify(callback) + "\n", function(err) {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      console.log("Content added to log.txt!");
+    }
+  });
 }
 
 function myTweets(){
@@ -106,36 +112,6 @@ function doWhatThisSays(){
       return console.log(error);
     }
     console.log(data);
-  });
-}
-
-function appendData(callback){
-  fs.appendFile("log.txt", JSON.stringify(callback) + "\n", function(err) {
-    if (err) {
-      console.log(err);
-    }
-    else {
-      console.log("Content added to log.txt!");
-    }
-  });
-}
-
-function noMovie(){
-  var queryUrl = "http://www.omdbapi.com/?t=Mr.+Nobody&y=&plot=short&apikey=trilogy";
-  request(queryUrl, function(error, response, body) {
-  if (!error && response.statusCode === 200) {
-      var movie = JSON.parse(body);
-      // console.log(movie);
-      console.log(movie.Title);
-      console.log("The movie's release year is: " + movie.Year);
-      console.log("The movie's IMDB rating is: " + movie.imdbRating);
-      console.log("The movie's Rotten Tomato rating is: " + movie.Ratings[1].Value);
-      console.log("The movie's country is: " + movie.Country);
-      console.log("The movie's language is: " + movie.Language);       
-      console.log("The movie's plot is: " + movie.Plot);
-      console.log("The movie's actors are: " + movie.Actors);    
-    }
-    appendData(movie);
   });
 }
 
