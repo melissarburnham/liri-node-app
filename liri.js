@@ -1,6 +1,6 @@
 
-var fs = require("fs");
 require("dotenv").config();
+var fs = require("fs");
 var arg2 = process.argv[2];
 var arg3 = process.argv[3];
 var request = require("request");
@@ -91,7 +91,7 @@ function movieThis(){
 
 function callSpotify(){
   lengthCheck();
-  if (arg2 == "spotify-this-song" && !process.argv[3]) {
+  if (arg2 == "spotify-this-song" && !arg3) {
       songOrMovie = "The Sign Ace of Base";
     }
   spotify.search({ type: 'track', query: songOrMovie }, function(err, data) {
@@ -111,7 +111,33 @@ function doWhatThisSays(){
     if (error) {
       return console.log(error);
     }
-    console.log(data);
+    var dataArr = data.split(",");
+    console.log(dataArr);
+  
+    switch (dataArr[0]) {
+      case "my-tweets":
+        songOrMovie = dataArr[1];
+        myTweets();
+        break;
+      
+      case "spotify-this-song":
+        songOrMovie = dataArr[1];
+        callSpotify();
+        break;
+      
+      case "movie-this":
+        songOrMovie = dataArr[1];
+        movieThis();
+        break;
+      
+      case "do-what-this-says":
+        doWhatThisSays();
+        break;
+  
+        default:
+        console.log('You need to tell me what to do');
+      } 
   });
+
 }
 
