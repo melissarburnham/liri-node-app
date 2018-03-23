@@ -60,10 +60,10 @@ function myTweets(){
   client.get('statuses/user_timeline', params, function(error, tweets, response) {
   if (!error) {
     for (var tweet in tweets) {
-    console.log(tweets[tweet].text + " Date written: " + tweets[tweet].created_at);
+    console.log(tweets[tweet].text + "\n" + " Date written: " + tweets[tweet].created_at + "\n");
+    appendData(tweets[tweet].text + " " + tweets[tweet].created_at);
         }
       }
-      appendData(tweets);
     });
   }
 
@@ -76,16 +76,17 @@ function movieThis(){
   request(queryUrl, function(error, response, body) {
   if (!error && response.statusCode === 200) {
       var movie = JSON.parse(body);
-      console.log(movie.Title);
-      console.log("The movie's release year is: " + movie.Year);
-      console.log("The movie's IMDB rating is: " + movie.imdbRating);
-      console.log("The movie's Rotten Tomato rating is: " + movie.Ratings[1].Value);
-      console.log("The movie's country is: " + movie.Country);
-      console.log("The movie's language is: " + movie.Language);       
-      console.log("The movie's plot is: " + movie.Plot);
-      console.log("The movie's actors are: " + movie.Actors);    
+      console.log(movie.Title + "\r\n" +
+      "The movie's release year is: " + movie.Year + "\r\n" +
+      "The movie's IMDB rating is: " + movie.imdbRating + "\r\n" +
+      "The movie's Rotten Tomato rating is: " + movie.Ratings[1].Value + "\r\n" +
+      "The movie's country is: " + movie.Country + "\r\n" +
+      "The movie's language is: " + movie.Language + "\r\n" +     
+      "The movie's plot is: " + movie.Plot + "\r\n" +
+      "The movie's actors are: " + movie.Actors);    
     }
-    appendData(movie);
+    appendData(movie.Title + " " + movie.Year + " " + movie.imdbRating + " " + movie.Ratings[1].Value
+    + " " + movie.Country + " " + movie.Language + " " + movie.Plot + " " + movie.Actors);
   });
 }
 
@@ -98,12 +99,16 @@ function callSpotify(){
     if (err) {
       return console.log('Error occurred: ' + err);
     }
-    console.log(songOrMovie);
-    console.log("Band/Artist Name: " + data.tracks.items[0].artists[0].name);
-    console.log("Song Name: " + data.tracks.items[0].name);
-    console.log("Song Link: " + data.tracks.items[0].external_urls.spotify);
-    console.log("Album Name: " + data.tracks.items[0].album.name);    
+    console.log(
+    "Band/Artist Name: " + data.tracks.items[0].artists[0].name + "\r\n" +
+    "Song Name: " + data.tracks.items[0].name + "\r\n" +
+    "Song Link: " + data.tracks.items[0].external_urls.spotify + "\r\n" +
+    "Album Name: " + data.tracks.items[0].album.name);    
+
+    appendData(data.tracks.items[0].artists[0].name + " " +  data.tracks.items[0].name + " " +
+    data.tracks.items[0].external_urls.spotify + " " + data.tracks.items[0].album.name);
   });
+
 }
 
 function doWhatThisSays(){
