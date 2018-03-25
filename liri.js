@@ -10,7 +10,7 @@ var client = new Twitter(keys.twitter);
 var Spotify = require('node-spotify-api');
 var spotify = new Spotify(keys.spotify);
 var nodeArgs = process.argv;
-var songOrMovie = "";
+var title = "";
 
 switch (arg2) {
     case "my-tweets":
@@ -25,8 +25,8 @@ switch (arg2) {
       movieThis();
       break;
     
-    case "do-what-this-says":
-      doWhatThisSays();
+    case "do-what-it-says":
+      doWhatItSays();
       break;
 
       default:
@@ -40,7 +40,7 @@ switch (arg2) {
 
 function lengthCheck(){
   for (var i = 3; i < nodeArgs.length; i++) {
-    songOrMovie = songOrMovie.trim() + " " + nodeArgs[i];
+    title = title.trim() + " " + nodeArgs[i];
   }
 }
 
@@ -70,9 +70,9 @@ function myTweets(){
 function movieThis(){
   lengthCheck();
   if (arg2 == "movie-this" && !arg3) {
-    songOrMovie = "Mr. Nobody";
+    title = "Mr. Nobody";
   }
-  var queryUrl = "http://www.omdbapi.com/?t=" + songOrMovie  + "&y=&plot=short&apikey=trilogy";
+  var queryUrl = "http://www.omdbapi.com/?t=" + title  + "&y=&plot=short&apikey=trilogy";
   request(queryUrl, function(error, response, body) {
   if (!error && response.statusCode === 200) {
       var movie = JSON.parse(body);
@@ -93,9 +93,9 @@ function movieThis(){
 function callSpotify(){
   lengthCheck();
   if (arg2 == "spotify-this-song" && !arg3) {
-      songOrMovie = "The Sign Ace of Base";
+      title = "The Sign Ace of Base";
     }
-  spotify.search({ type: 'track', query: songOrMovie }, function(err, data) {
+  spotify.search({ type: 'track', query: title }, function(err, data) {
     if (err) {
       return console.log('Error occurred: ' + err);
     }
@@ -111,7 +111,7 @@ function callSpotify(){
 
 }
 
-function doWhatThisSays(){
+function doWhatItSays(){
   fs.readFile("random.txt", "utf8", function(error, data) {
     if (error) {
       return console.log(error);
@@ -121,22 +121,22 @@ function doWhatThisSays(){
   
     switch (dataArr[0]) {
       case "my-tweets":
-        songOrMovie = dataArr[1];
+        title = dataArr[1];
         myTweets();
         break;
       
       case "spotify-this-song":
-        songOrMovie = dataArr[1];
+        title = dataArr[1];
         callSpotify();
         break;
       
       case "movie-this":
-        songOrMovie = dataArr[1];
+        title = dataArr[1];
         movieThis();
         break;
       
-      case "do-what-this-says":
-        doWhatThisSays();
+      case "do-what-it-says":
+        doWhatItSays();
         break;
   
         default:
