@@ -33,11 +33,6 @@ switch (arg2) {
       console.log('You need to tell me what to do');
     } 
 
-//NEED TO DO:
-    //fix the do what this says function
-    //fix the log.txt data display
-
-
 function lengthCheck(){
   for (var i = 3; i < nodeArgs.length; i++) {
     title = title.trim() + " " + nodeArgs[i];
@@ -58,10 +53,10 @@ function appendData(callback){
 function myTweets(){
   var params = {screen_name: 'melburn1133', count: 20};
   client.get('statuses/user_timeline', params, function(error, tweets, response) {
-  if (!error) {
-    for (var tweet in tweets) {
-    console.log(tweets[tweet].text + "\n" + " Date written: " + tweets[tweet].created_at + "\n");
-    appendData(tweets[tweet].text + " " + tweets[tweet].created_at);
+    if (!error) {
+      for (var tweet in tweets) {
+      console.log(tweets[tweet].text + "\n" + " Date written: " + tweets[tweet].created_at + "\n");
+      appendData(tweets[tweet].text + " " + tweets[tweet].created_at);
         }
       }
     });
@@ -74,7 +69,7 @@ function movieThis(){
   }
   var queryUrl = "http://www.omdbapi.com/?t=" + title  + "&y=&plot=short&apikey=trilogy";
   request(queryUrl, function(error, response, body) {
-  if (!error && response.statusCode === 200) {
+    if (!error && response.statusCode === 200) {
       var movie = JSON.parse(body);
       console.log(movie.Title + "\r\n" +
       "The movie's release year is: " + movie.Year + "\r\n" +
@@ -84,7 +79,7 @@ function movieThis(){
       "The movie's language is: " + movie.Language + "\r\n" +     
       "The movie's plot is: " + movie.Plot + "\r\n" +
       "The movie's actors are: " + movie.Actors);    
-    }
+      }
     appendData(movie.Title + " " + movie.Year + " " + movie.imdbRating + " " + movie.Ratings[1].Value
     + " " + movie.Country + " " + movie.Language + " " + movie.Plot + " " + movie.Actors);
   });
@@ -143,6 +138,5 @@ function doWhatItSays(){
         console.log('You need to tell me what to do');
       } 
   });
-
 }
 
